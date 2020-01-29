@@ -5,8 +5,8 @@ class Controller_signup extends Controller
 
 	function __construct()
 	{
+		parent::__construct();
 		$this->model = new Model_signup();
-		$this->view = new View();
 	}
 	
 	function index()
@@ -19,17 +19,20 @@ class Controller_signup extends Controller
 
 	function register()
 	{
-		if (isset($_POST))
+		if ($_POST &&
+			isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password']))
 		{
-			$this->model->saveToDatabase($_POST['username'], $_POST['password']);
-			// $_SESSION['username']	= $_POST['username'];
-			// $_SESSION['user_id']	= 1;
-			// $_SESSION['password']	= $_POST['password'];
-			// $this->index();
-			// echo "Hello, ".$_SESSION['username']."!".PHP_EOL;
+			$username	= $_POST['username'];
+			$email		= $_POST['email'];
+			$pass_hash	= password_hash($_POST['password'], PASSWORD_DEFAULT);
+			if ($this->model->getData($username, $email))
+			echo "Username already exists";
+			else
+				$this->model->register($username, $email, $pass_hash);
 		}
 		else
-			$this->index();
+			echo "ERROR";
+		$this->index();
 	}
 }
 
