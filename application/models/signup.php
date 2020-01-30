@@ -1,33 +1,43 @@
 <?php
 
-class Model_signup extends Model
+class SignupModel extends Model
 {
-	static $query_check_user =
-		"SELECT id FROM users WHERE
-			username = :username OR email = :email";
+	private static $query_check_username =
+		"SELECT id FROM users WHERE username = :username";
 
-	static $query_insert_user =
+	private static $query_check_email =
+		"SELECT id FROM users WHERE email = :email";
+
+	private static $query_insert_user =
 		"INSERT INTO users (username, email, pass_hash)
 			VALUES (:username, :email, :pass_hash)";
 
-	function getData($username, $email)
+	function duplicateUsername()
 	{
-		$request = $this->pdo->prepare(self::$query_check_user);
-		$request->bindParam(':username', $username);
-		$request->bindParam(':email', $email);
-		$result = $this->pdo->execute($request);
-		if ($result)
-			return true;
-		return false;
+		$data = [':username' => $_POST['username']];
+		return empty($this->pdo->select(self::$query_check_username, $data))
+			? false : true;
+	}
+
+	function duplicateEmail()
+	{
+		$data = [':email' => $_POST['email']];
+		return empty($this->pdo->select(self::$query_check_email, $data))
+			? false : true;
 	}
 	
-	function register($username, $email, $pass_hash)
+	function saveUser()
 	{
-		$request = $this->pdo->prepare(self::$query_insert_user);
-		$request->bindParam(':username', $username);
-		$request->bindParam(':email', $email);
-		$request->bindParam(':pass_hash', $pass_hash);
-		$this->pdo->execute($request);
+		$data = array(
+			':username'		=> $_POST['username'],
+			':email'		=> $_POST['email'],
+			':pass_hash'	=> password_hash(
+								$_POST['password'], PASSWORD_DEFAULT)
+		);
+		if (!$this->pdo->upsert(self::$query_insert_user, $data))
+			return false;
+		$data = [':username' => $_POST['username']];
+		return $this->pdo->select(self::$query_check_username, $data)[0];
 	}
 }
 

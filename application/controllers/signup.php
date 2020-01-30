@@ -1,38 +1,45 @@
 <?php
 
-class Controller_signup extends Controller
+class SignupController extends Controller
 {
 
 	function __construct()
 	{
 		parent::__construct();
-		$this->model = new Model_signup();
+		$this->model = new SignupModel();
 	}
 	
-	function index()
+	function indexAction()
 	{
-		if (isset($_SESSION['user_id']))
-			$this->view->generate('views/userpage.php', 'views/template.php');
-		else
-			$this->view->generate('views/signup.php', 'views/template.php');
+		$page = isset($_SESSION['user_id']) ? 'views/userpage.php' : 'views/signup.php';
+		$this->view->generate($page, 'views/template.php');
 	}
 
-	function register()
+	function registerAction()
 	{
-		if ($_POST &&
-			isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password']))
+		if (isset($_POST) && !empty($_POST['username'])
+			&& !empty($_POST['email']) && !empty($_POST['password']))
 		{
-			$username	= $_POST['username'];
-			$email		= $_POST['email'];
-			$pass_hash	= password_hash($_POST['password'], PASSWORD_DEFAULT);
-			if ($this->model->getData($username, $email))
-			echo "Username already exists";
+			if ($this->model->duplicateUsername())
+				$status_msg = "Username already taken";
+			else if ($this->model->duplicateEmail())
+				$status_msg = "This email already registered";
 			else
-				$this->model->register($username, $email, $pass_hash);
+			{
+				$saved = $this->model->saveUser();
+				if ($saved)
+				{
+					$_SESSION['user_id']	= $saved['id'];
+					$_SESSION['username']	= $_POST['username'];
+					$_SESSION['email']		= $_POST['email'];
+					$status_msg = "Registartion succesfull!";
+				}
+				else
+					$status_msg = "Registration failed";
+			}
+			$this->view->alert($status_msg);
 		}
-		else
-			echo "ERROR";
-		$this->index();
+		$this->indexAction();
 	}
 }
 

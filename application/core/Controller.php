@@ -9,7 +9,7 @@ class Controller {
 		$this->view = new View();
 	}
 	
-	function index() {}
+	function indexAction() {}
 }
 
 ?>

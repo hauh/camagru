@@ -10,15 +10,15 @@ class DB_Config
 		'users' => "
 			CREATE TABLE IF NOT EXISTS users (
 				id			INT				AUTO_INCREMENT PRIMARY KEY,
-				username	VARCHAR(30)		NOT NULL,
-				email		VARCHAR(255)	NOT NULL,
+				username	VARCHAR(30)		UNIQUE NOT NULL,
+				email		VARCHAR(255)	UNIQUE NOT NULL,
 				pass_hash	VARCHAR(255)	NOT NULL
 			)
 		",
 		'images' => "
 			CREATE TABLE IF NOT EXISTS images (
 				id			INT				AUTO_INCREMENT PRIMARY KEY,
-				name_hash	VARCHAR(255)	NOT NULL,
+				name_hash	VARCHAR(255)	UNIQUE NOT NULL,
 				author_id	INT				NOT NULL,
 				likes		INT				DEFAULT 0,
 				FOREIGN KEY (author_id) REFERENCES users(id)

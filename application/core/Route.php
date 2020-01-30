@@ -14,9 +14,9 @@ class Route
 		if (!file_exists($controller_file))
 			Route::ErrorPage404();
 		include $controller_file;
-		$controller_name = 'Controller_'.$controller_name;
+		$controller_name = $controller_name.'Controller';
 		$controller = new $controller_name;
-		$action = empty($routes[2]) ? 'index' : strtolower($routes[2]);
+		$action = empty($routes[2]) ? 'indexAction' : strtolower($routes[2]).'Action';
 		if (!method_exists($controller, $action))
 			Route::ErrorPage404();
 		$controller->$action();
@@ -27,7 +27,7 @@ class Route
         $host = 'http://'.$_SERVER['HTTP_HOST'].'/';
         header('HTTP/1.1 404 Not Found');
 		header("Status: 404 Not Found");
-		header('Location:'.$host.'404');
+		header('Location:'.$host.'page404');
     }
 }
 

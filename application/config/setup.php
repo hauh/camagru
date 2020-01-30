@@ -9,10 +9,10 @@ ini_set('log_errors', true);
 ini_set("error_log", "camagru.log");
 ini_set('log_errors_max_len', 1024);
 
-require_once dirname(__FILE__)."/../core/SQL.php";
+require_once "application/core/PDO.php";
 
-$sql = new SQL();
+$pdo = new PDOWrapper();
 foreach (DB_Config::$table_queries as $name=>$query)
-	$sql->execute($query, $name);
+	$pdo->upsert($query);
 
 ?>

@@ -1,8 +1,8 @@
 <?php
 
-class Controller_main extends Controller
+class MainController extends Controller
 {
-	function index()
+	function indexAction()
 	{	
 		$this->view->generate('views/main.php', 'views/template.php');
 	}
