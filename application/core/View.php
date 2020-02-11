@@ -17,6 +17,10 @@ class View
 	function alert($message) {
 		echo "<script type='text/javascript'>alert('$message')</script>";
 	}
+
+	function redirect($where) {
+		echo "<script type='text/javascript'>window.location = '".$where."'</script>";
+	}
 }
 
 ?>
