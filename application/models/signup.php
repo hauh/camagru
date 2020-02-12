@@ -29,14 +29,13 @@ class SignupModel extends Model
 	function saveUser()
 	{
 		$data = array(
-			':username'		=> $_POST['username'],
-			':email'		=> $_POST['email'],
-			':pass_hash'	=> password_hash(
-								$_POST['password'], PASSWORD_DEFAULT)
+			':username'		=> $_SESSION['username'],
+			':email'		=> $_SESSION['email'],
+			':pass_hash'	=> $_SESSION['passwd']
 		);
 		if (!$this->pdo->upsert(self::$query_insert_user, $data))
 			return false;
-		$data = [':username' => $_POST['username']];
+		$data = [':username' => $_SESSION['username']];
 		return $this->pdo->select(self::$query_check_username, $data)[0];
 	}
 }
