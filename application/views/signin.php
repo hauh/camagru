@@ -1,5 +1,5 @@
 <link rel="stylesheet" type="text/css" href="/styles/sign_form.css">
-<form class=sign_form name="login" method="POST" action=/signin/auth>
+<form class=sign_form name="login" method="POST" action=/userpage/auth>
 	<div class=input_field><input type="text"	name="username"
 			placeholder="Enter your username" required></div>
 	<div class=input_field><input type="password" name="passwd"

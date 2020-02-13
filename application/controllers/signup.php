@@ -2,19 +2,12 @@
 
 class SignupController extends Controller
 {
-
-	function __construct()
-	{
-		parent::__construct();
-		$this->model = new SignupModel();
-	}
-	
-	function indexAction()
+	function indexAction($route = null)
 	{
 		if (!empty($_SESSION['user_id']))
 			$page = 'views/userpage.php';
-		else if (!empty($_SESSION['email']))
-			$page = 'views/confirmation_code.php';
+		else if (!empty($_SESSION['code']))
+			$page = 'views/mailcode.php';
 		else
 			$page = 'views/signup.php';
 		$this->view->generate($page, 'views/template.php');
@@ -32,12 +25,12 @@ class SignupController extends Controller
 
 	function registerAction()
 	{
-		if (!empty($_POST['username']) && !empty($_POST['email']) && !empty($_POST['passwd']))
+		if (empty($_SESSION['user_id']) && !empty($_POST['username'])
+			&& !empty($_POST['email']) && !empty($_POST['passwd']))
 		{
-			if ($this->model->duplicateUsername())
-				$this->view->alert("Username already taken");
-			else if ($this->model->duplicateEmail())
-				$this->view->alert("This email already registered");
+			if (($duplicate_what = $this->model->duplicateUserData(
+					$_POST['username'], $_POST['email'])))
+				$this->view->alert("This ".$duplicate_what." already taken");
 			else
 			{
 				$_SESSION['username']	= $_POST['username'];
@@ -60,24 +53,23 @@ class SignupController extends Controller
 		}
 		else if (!empty($_POST['back']))
 			session_unset();
-		else if (!empty($_POST['code']))
+		else if (!empty($_POST['code'] && empty($_SESSION['user_id'])))
 		{
 			if ($_SESSION['code'] == $_POST['code'])
 			{
-				$user = $this->model->saveUser();
-				if ($user)
-				{
-					$_SESSION['user_id'] = $user['id'];
+				if (($_SESSION['user_id'] = $this->model->saveUser(
+						$_SESSION['username'], $_SESSION['email'], $_SESSION['passwd'])))
 					$this->view->alert("Registartion succesfull!");
-				}
 				else
-					$this->view->alert("Registration failed");
+					$this->view->alert("Registration failed. Try again or contact admin.");
+				unset($_SESSION['code']);
 			}
 			else
 				$this->view->alert("Wrong code :(");
 		}
 		$this->indexAction();
 	}
+
 }
 
 ?>

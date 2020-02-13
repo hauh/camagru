@@ -1,42 +1,38 @@
 <?php
 
+require_once "getuser.trait.php";
+
 class SignupModel extends Model
 {
-	private static $query_check_username =
-		"SELECT id FROM users WHERE username = :username";
-
-	private static $query_check_email =
-		"SELECT id FROM users WHERE email = :email";
+	use GetUser;
 
 	private static $query_insert_user =
 		"INSERT INTO users (username, email, pass_hash)
 			VALUES (:username, :email, :pass_hash)";
 
-	function duplicateUsername()
+	function duplicateUserData($username, $email)
 	{
-		$data = [':username' => $_POST['username']];
-		return empty($this->pdo->select(self::$query_check_username, $data))
-			? false : true;
+		if (!($user = $this->getUser($username, $email)))
+			return null;
+		if ($user['username'] == $username)
+			return "username";
+		if ($user['email'] == $email)
+			return "email";
 	}
 
-	function duplicateEmail()
+	function saveUser($username, $email, $pass_hash)
 	{
-		$data = [':email' => $_POST['email']];
-		return empty($this->pdo->select(self::$query_check_email, $data))
-			? false : true;
-	}
-	
-	function saveUser()
-	{
-		$data = array(
-			':username'		=> $_SESSION['username'],
-			':email'		=> $_SESSION['email'],
-			':pass_hash'	=> $_SESSION['passwd']
-		);
-		if (!$this->pdo->upsert(self::$query_insert_user, $data))
-			return false;
-		$data = [':username' => $_SESSION['username']];
-		return $this->pdo->select(self::$query_check_username, $data)[0];
+		if ($this->pdo->execute(
+					self::$query_insert_user,
+					[
+						':username'		=> $username,
+						':email'		=> $email,
+						':pass_hash'	=> $pass_hash
+					]
+				)->errorCode() == '00000'
+			)
+			return $this->getUser($username, $email)['id'];
+		return null;
 	}
 }
 

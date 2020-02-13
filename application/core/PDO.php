@@ -27,27 +27,17 @@ class PDOWrapper
 		}
 	}
 
-	private function _execute($query, $data)
+	function execute($query, $data = [])
 	{
 		try {
 			$statement = self::$pdo->prepare($query);
-			if ($statement->execute($data))
-				return $statement;
+			$statement->execute($data);
 		} catch (PDOException $e) {
 			error_log("Request\n".$query."\nfailed because: ".$e->getMessage());
 		}
-		return null;
+		return $statement;
 	}
 
-	public function upsert($query, $data = [])	{
-		return $this->_execute($query, $data) ? true : false;
-	}
-
-	public function select($query, $data = [])
-	{
-		$statement = $this->_execute($query, $data);
-		return $statement ? $statement->fetchAll() : [];
-	}
 }
 
 ?>
