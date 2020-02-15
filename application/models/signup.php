@@ -1,11 +1,9 @@
 <?php
 
-require_once "getuser.trait.php";
+require_once "user.php";
 
-class SignupModel extends Model
+class SignupModel extends UserModel
 {
-	use GetUser;
-
 	private static $query_insert_user =
 		"INSERT INTO users (username, email, pass_hash)
 			VALUES (:username, :email, :pass_hash)";

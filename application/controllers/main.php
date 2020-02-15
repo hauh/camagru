@@ -4,7 +4,10 @@ class MainController extends Controller
 {
 	function indexAction()
 	{	
-		$this->view->generate('views/main.php', 'views/template.php');
+		$this->view->generate(
+			'views/main.php', 'views/template.php',
+			$this->model->getAllImages()
+		);
 	}
 }
 

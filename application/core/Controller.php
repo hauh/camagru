@@ -1,7 +1,7 @@
 <?php
 
-class Controller {
-	
+class Controller
+{
 	public $model;
 	public $view;
 	
@@ -11,7 +11,11 @@ class Controller {
 		$model_name = str_replace('Controller', 'Model', get_class($this));
 		$this->model = class_exists($model_name) ? new $model_name : null;
 	}
-	
+
+	static function isUserLoggedIn() {
+		return isset($_SESSION) && !empty($_SESSION['user_id']) ? true : false;
+	}
+
 	function indexAction() {}
 }
 

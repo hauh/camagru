@@ -1,6 +1,6 @@
 <?php
 
-trait GetUser
+class UserModel extends Model
 {
 	private static $query_get_user =
 		"SELECT * FROM users

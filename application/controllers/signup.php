@@ -2,10 +2,10 @@
 
 class SignupController extends Controller
 {
-	function indexAction($route = null)
+	function indexAction()
 	{
-		if (!empty($_SESSION['user_id']))
-			$page = 'views/userpage.php';
+		if (isset($_SESSION) && !empty($_SESSION['user_id']))
+			$page = 'views/profile.php';
 		else if (!empty($_SESSION['code']))
 			$page = 'views/mailcode.php';
 		else

@@ -10,17 +10,18 @@ class DB_Config
 		'users' => "
 			CREATE TABLE IF NOT EXISTS users (
 				id			INT				AUTO_INCREMENT PRIMARY KEY,
-				username	VARCHAR(30)		UNIQUE NOT NULL,
+				username	VARCHAR(32)		UNIQUE NOT NULL,
 				email		VARCHAR(255)	UNIQUE NOT NULL,
-				pass_hash	VARCHAR(255)	NOT NULL
+				pass_hash	VARCHAR(255)	NOT NULL,
+				avatar		VARCHAR(32)
 			)
 		",
 		'images' => "
 			CREATE TABLE IF NOT EXISTS images (
-				id			INT				AUTO_INCREMENT PRIMARY KEY,
-				name_hash	VARCHAR(255)	UNIQUE NOT NULL,
+				filename	VARCHAR(32)		PRIMARY KEY NOT NULL,
 				author_id	INT				NOT NULL,
 				likes		INT				DEFAULT 0,
+				upload_date	DATETIME,
 				FOREIGN KEY (author_id) REFERENCES users(id)
 					ON DELETE CASCADE
 			)
@@ -30,12 +31,16 @@ class DB_Config
 				id			INT				AUTO_INCREMENT PRIMARY KEY,
 				text		TEXT			NOT NULL,
 				author_id	INT				NOT NULL,
-				image_id	INT				NOT NULL,
+				image_id	VARCHAR(32)		NOT NULL,
 				FOREIGN KEY (author_id) REFERENCES users(id)
 					ON DELETE CASCADE,
-				FOREIGN KEY (image_id) REFERENCES images(id)
+				FOREIGN KEY (image_id) REFERENCES images(filename)
 					ON DELETE CASCADE
 			)
+		",
+		'fk_images' => "
+			ALTER TABLE users
+				ADD CONSTRAINT fk_avatar FOREIGN KEY (avatar) REFERENCES images(filename);
 		"
 	);
 }

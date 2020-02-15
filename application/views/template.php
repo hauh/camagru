@@ -8,10 +8,24 @@
 <body>
 	<header>
 		<div class=header_menu>
-			<a href=/main>Main page</a>
-			<a href=/userpage>Sign in</a>
-			<a href=/signup>Sign up</a>
-			<a href=/page404>Something</a>
+			<?php if (isset($_SESSION) && !empty($_SESSION['user_id']))
+				{
+					?>
+						<a href=/main>Main page</a>
+						<a href=/profile>Profile</a>
+						<a href=/page404>Something</a>
+					<?php
+				}
+				else
+				{
+					?>
+						<a href=/main>Main page</a>
+						<a href=/signin>Sign in</a>
+						<a href=/signup>Sign up</a>
+						<a href=/page404>Something</a>
+					<?php
+				}
+			?>
 		</div>
 	</header>
 	<?php include 'application/'.$content_view; ?>
