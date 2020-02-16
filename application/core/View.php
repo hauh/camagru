@@ -2,8 +2,7 @@
 
 class View
 {
-	function generate($content_view, $template_view, $data = [])
-	{
+	function generate($content_view, $template_view, $data = []) {
 		include 'application/'.$template_view;
 	}
 
@@ -12,7 +11,7 @@ class View
 	}
 
 	function redirect($where) {
-		echo "<script type='text/javascript'>window.location = '".$where."'</script>";
+		echo "<script type='text/javascript'>window.location = '$where'</script>";
 	}
 }
 

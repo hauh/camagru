@@ -27,10 +27,10 @@ class SignupModel extends UserModel
 						':email'		=> $email,
 						':pass_hash'	=> $pass_hash
 					]
-				)->errorCode() == '00000'
+				)->errorCode() != '00000'
 			)
-			return $this->getUser($username, $email)['id'];
-		return null;
+			return null;
+		return $this->getUser($username, $email)['id'];
 	}
 }
 

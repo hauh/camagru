@@ -5,10 +5,9 @@ class SigninController extends Controller
 	function indexAction()
 	{
 		if (isset($_SESSION) && !empty($_SESSION['user_id']))
-			$page = 'views/profile.php';
+			$this->view->redirect('/profile');
 		else
-			$page = 'views/signin.php';
-		$this->view->generate($page, 'views/template.php');
+			$this->view->generate('views/signin.php', 'views/template.php');
 	}
 
 	function authAction()

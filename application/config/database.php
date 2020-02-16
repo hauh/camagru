@@ -9,7 +9,7 @@ class DB_Config
 	public static $table_queries = array(
 		'users' => "
 			CREATE TABLE IF NOT EXISTS users (
-				id			INT				AUTO_INCREMENT PRIMARY KEY,
+				id			INT				PRIMARY KEY AUTO_INCREMENT,
 				username	VARCHAR(32)		UNIQUE NOT NULL,
 				email		VARCHAR(255)	UNIQUE NOT NULL,
 				pass_hash	VARCHAR(255)	NOT NULL,
@@ -18,7 +18,8 @@ class DB_Config
 		",
 		'images' => "
 			CREATE TABLE IF NOT EXISTS images (
-				filename	VARCHAR(32)		PRIMARY KEY NOT NULL,
+				id			INT				PRIMARY KEY AUTO_INCREMENT,
+				filename	VARCHAR(32)		UNIQUE NOT NULL,
 				author_id	INT				NOT NULL,
 				likes		INT				DEFAULT 0,
 				upload_date	DATETIME,
@@ -31,16 +32,12 @@ class DB_Config
 				id			INT				AUTO_INCREMENT PRIMARY KEY,
 				text		TEXT			NOT NULL,
 				author_id	INT				NOT NULL,
-				image_id	VARCHAR(32)		NOT NULL,
+				image_id	INT				NOT NULL,
 				FOREIGN KEY (author_id) REFERENCES users(id)
 					ON DELETE CASCADE,
-				FOREIGN KEY (image_id) REFERENCES images(filename)
+				FOREIGN KEY (image_id) REFERENCES images(id)
 					ON DELETE CASCADE
 			)
-		",
-		'fk_images' => "
-			ALTER TABLE users
-				ADD CONSTRAINT fk_avatar FOREIGN KEY (avatar) REFERENCES images(filename);
 		"
 	);
 }
