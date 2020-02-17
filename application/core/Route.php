@@ -8,7 +8,8 @@ class Route
 		$controller_name = empty($routes[1]) ? 'Main' : strtolower($routes[1]);
 		if (!file_exists("application/controllers/".$controller_name.'.php'))
 			return Route::ErrorPage404();
-		$controller = Route::getController($controller_name);
+		$argument = empty($routes[3]) ? null : $routes[3];
+		$controller = Route::getController($controller_name, $argument);
 		$action = empty($routes[2])
 			? 'indexAction'
 			: strtolower($routes[2]).'Action';
@@ -17,13 +18,13 @@ class Route
 			: $controller->indexAction();
 	}
 
-	static function getController($controller_name)
+	static function getController($controller_name, $argument)
 	{
 		include_once "application/controllers/".$controller_name.'.php';
 		@include_once "application/models/".$controller_name.'.php';
 		$controller_name .= 'Controller';
 		try {
-			return new $controller_name;
+			return new $controller_name($argument);
 		}
 		catch (LoginRequired $e)
 		{

@@ -8,16 +8,16 @@ class PDOWrapper
 
 	function __construct()
 	{
-		if (self::$pdo)
+		if (Self::$pdo)
 			return;
 		try
 		{
-			self::$pdo = new PDO(
+			Self::$pdo = new PDO(
 				DB_Config::$db_address,
 				DB_Config::$db_user,
 				DB_Config::$db_passwd
 			);
-			self::$pdo->setAttribute(
+			Self::$pdo->setAttribute(
 				PDO::ATTR_ERRMODE,
 				PDO::ERRMODE_EXCEPTION
 			);
@@ -30,7 +30,7 @@ class PDOWrapper
 	function execute($query, $data = [])
 	{
 		try {
-			$statement = self::$pdo->prepare($query);
+			$statement = Self::$pdo->prepare($query);
 			$statement->execute($data);
 		} catch (PDOException $e) {
 			error_log("Request\n".$query."\nfailed because: ".$e->getMessage());

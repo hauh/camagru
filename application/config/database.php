@@ -38,6 +38,17 @@ class DB_Config
 				FOREIGN KEY (image_id) REFERENCES images(id)
 					ON DELETE CASCADE
 			)
+		",
+		'likes' => "
+			CREATE TABLE IF NOT EXISTS likes (
+				user_id		INT,
+				image_id	INT,
+				PRIMARY KEY (user_id, image_id),
+				FOREIGN KEY (user_id) REFERENCES users(id)
+					ON DELETE CASCADE,
+				FOREIGN KEY (image_id) REFERENCES images(id)
+					ON DELETE CASCADE
+			)
 		"
 	);
 }

@@ -5,11 +5,11 @@ class Controller
 	public $model;
 	public $view;
 	
-	function __construct($user_id = null)
+	function __construct($some_id = null)
 	{
 		$this->view = new View();
 		$model_name = str_replace('Controller', 'Model', get_class($this));
-		$this->model = class_exists($model_name) ? new $model_name($user_id) : null;
+		$this->model = class_exists($model_name) ? new $model_name($some_id) : null;
 	}
 
 	static function isUserLoggedIn() {

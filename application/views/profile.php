@@ -30,7 +30,11 @@
 	{
 		echo "
 			<form method='POST' action='/profile/deleteImage'>
-				<div><img src='/uploads/{$image['filename']}'></div>
+				<div>
+					<a href=/image/show/{$image['id']}>
+						<img src='/uploads/{$image['filename']}'>
+					</a>
+				</div>
 				<div>
 					<input hidden name='image_id' value='{$image['id']}'>
 					<input hidden name='filename' value='{$image['filename']}'>

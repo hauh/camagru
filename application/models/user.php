@@ -9,7 +9,7 @@ class UserModel extends Model
 	function getUser($username, $email)
 	{
 		$user = $this->pdo->execute(
-				self::$query_get_user,
+				Self::$query_get_user,
 				[
 					':username'	=> $username,
 					':email'	=> $email

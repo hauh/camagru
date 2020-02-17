@@ -21,7 +21,7 @@ class SignupModel extends UserModel
 	function saveUser($username, $email, $pass_hash)
 	{
 		if ($this->pdo->execute(
-					self::$query_insert_user,
+					Self::$query_insert_user,
 					[
 						':username'		=> $username,
 						':email'		=> $email,
